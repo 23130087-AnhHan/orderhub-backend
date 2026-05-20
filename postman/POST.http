@@ -1,0 +1,25 @@
+### 1. Register account
+POST http://localhost:8080/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "John Doe",
+  "email": "bohn@example.com",
+  "password": "Password123",
+  "phone": "0909123456"
+}
+
+
+### 2. Login account
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "Password123"
+}
+
+
+### 3. Get current user
+GET http://localhost:8080/api/v1/auth/me
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJib2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MjkwNzYwLCJleHAiOjE3NzkzNzcxNjB9.IqggE4PPRbH4q3ff-j_Q5KvWObWJQDrx2A0lUXwMB8Y7ltu-9MImco6-t2AkxHK5_F9JnlMtcTC7PYlHH8qlOA
