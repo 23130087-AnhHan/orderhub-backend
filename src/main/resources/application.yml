@@ -18,3 +18,8 @@ spring:
 
 server:
   port: 8080
+
+app:
+  jwt:
+    secret: "orderhub-secret-key-for-development-only-must-be-at-least-32-characters"
+    expiration-ms: 86400000
