@@ -1,0 +1,78 @@
+### 1. Get public categories
+GET http://localhost:8080/api/v1/categories
+
+### 2. Get public products
+GET http://localhost:8080/api/v1/products
+
+### 3. Login user
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "Password123"
+}
+
+### 4. Login admin user
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "Password123"
+}
+
+### 5. Create category - ADMIN
+POST http://localhost:8080/api/v1/admin/categories
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzA3MDgzLCJleHAiOjE3NzkzOTM0ODN9.YFfw7JYAZuucgy8OJWpVOrzwQZb1aIFiSXa5hpbb0Mmn-QGLZxKmSGTaEFGBd-J3V0k6RC2bRTKr35T51U-vLQ
+Content-Type: application/json
+
+{
+  "name": "T-Shirts",
+  "description": "T-shirt products",
+  "status": "ACTIVE"
+}
+
+### 6. Get public categories again
+GET http://localhost:8080/api/v1/categories
+
+### 7. Create product - ADMIN
+POST http://localhost:8080/api/v1/admin/products
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzA3MDgzLCJleHAiOjE3NzkzOTM0ODN9.YFfw7JYAZuucgy8OJWpVOrzwQZb1aIFiSXa5hpbb0Mmn-QGLZxKmSGTaEFGBd-J3V0k6RC2bRTKr35T51U-vLQ
+Content-Type: application/json
+
+{
+  "categoryId": 1,
+  "name": "Basic T-Shirt",
+  "description": "A basic cotton T-shirt",
+  "price": 199000,
+  "thumbnailUrl": "https://example.com/tshirt.jpg",
+  "status": "ACTIVE",
+  "variants": [
+    {
+      "sku": "TSHIRT-WHITE-M",
+      "color": "White",
+      "size": "M",
+      "stockQuantity": 20,
+      "price": 199000,
+      "status": "ACTIVE"
+    },
+    {
+      "sku": "TSHIRT-BLACK-L",
+      "color": "Black",
+      "size": "L",
+      "stockQuantity": 15,
+      "price": 209000,
+      "status": "ACTIVE"
+    }
+  ]
+}
+
+### 8. Get public products again
+GET http://localhost:8080/api/v1/products
+
+### 9. Search products by keyword
+GET http://localhost:8080/api/v1/products?keyword=shirt&page=0&size=10
+
+### 10. Get products by category
+GET http://localhost:8080/api/v1/products?categoryId=1
