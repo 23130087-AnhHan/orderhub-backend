@@ -24,6 +24,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.orderhub.notification.service.NotificationService;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -38,19 +39,22 @@ public class OrderService {
     private final ProductVariantRepository productVariantRepository;
     private final UserRepository userRepository;
     private final OrderMapper orderMapper;
+    private final NotificationService notificationService;
 
     public OrderService(
             OrderRepository orderRepository,
             CartRepository cartRepository,
             ProductVariantRepository productVariantRepository,
             UserRepository userRepository,
-            OrderMapper orderMapper
+            OrderMapper orderMapper,
+            NotificationService notificationService
     ) {
         this.orderRepository = orderRepository;
         this.cartRepository = cartRepository;
         this.productVariantRepository = productVariantRepository;
         this.userRepository = userRepository;
         this.orderMapper = orderMapper;
+        this.notificationService = notificationService;
     }
 
     @Transactional
@@ -100,6 +104,13 @@ public class OrderService {
         order.setTotalAmount(totalAmount);
 
         Order savedOrder = orderRepository.save(order);
+
+        notificationService.createNotification(
+                user,
+                "ORDER_CREATED",
+                "Order created",
+                "Your order " + savedOrder.getOrderCode() + " has been created and is waiting for payment."
+        );
 
         cart.getItems().clear();
         cartRepository.save(cart);
