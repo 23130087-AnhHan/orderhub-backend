@@ -1,7 +1,7 @@
 package com.orderhub.notification.mapper;
 
+import com.orderhub.notification.document.Notification;
 import com.orderhub.notification.dto.NotificationResponse;
-import com.orderhub.notification.entity.Notification;
 import org.springframework.stereotype.Component;
 
 @Component
