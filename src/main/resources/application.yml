@@ -25,6 +25,11 @@ spring:
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -44,6 +49,12 @@ spring:
     username: ${DB_USERNAME:orderhub_user}
     password: ${DB_PASSWORD:orderhub_password}
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+  data:
+    redis:
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}
+
 
   jpa:
     hibernate:

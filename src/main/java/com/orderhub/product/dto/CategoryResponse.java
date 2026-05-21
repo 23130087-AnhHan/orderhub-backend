@@ -1,8 +1,9 @@
 package com.orderhub.product.dto;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class CategoryResponse {
+public class CategoryResponse implements Serializable {
 
     private Long id;
     private String name;

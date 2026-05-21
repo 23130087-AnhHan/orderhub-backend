@@ -1,8 +1,9 @@
 package com.orderhub.common.response;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class PageResponse<T> {
+public class PageResponse<T> implements Serializable {
 
     private List<T> items;
     private int page;

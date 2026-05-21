@@ -12,6 +12,8 @@ import com.orderhub.product.entity.Product;
 import com.orderhub.product.mapper.ProductMapper;
 import com.orderhub.product.repository.ProductRepository;
 import com.orderhub.product.repository.ProductVariantRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -38,7 +40,15 @@ public class ProductService {
         this.productMapper = productMapper;
     }
 
+    /*
+     * Create a new product with variants.
+     *
+     * Cache rule:
+     * When admin creates a product, product list/detail cache must be cleared.
+     * Otherwise, users may still see old cached product data.
+     */
     @Transactional
+    @CacheEvict(value = {"products", "product-detail"}, allEntries = true)
     public ProductResponse createProduct(ProductRequest request) {
         Category category = categoryService.getActiveCategoryEntity(request.getCategoryId());
 
@@ -50,6 +60,18 @@ public class ProductService {
         return productMapper.toResponse(savedProduct);
     }
 
+    /*
+     * Get product list with pagination and optional filters.
+     *
+     * Cache rule:
+     * The result is cached by page, size, keyword, categoryId and status.
+     * If the same request is called again, data can be returned from Redis
+     * instead of querying MySQL again.
+     */
+    @Cacheable(
+            value = "products",
+            key = "'page=' + #request.page + ':size=' + #request.size + ':keyword=' + #request.keyword + ':categoryId=' + #request.categoryId + ':status=' + #request.status"
+    )
     public PageResponse<ProductResponse> getProducts(ProductFilterRequest request) {
         Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
 
@@ -85,6 +107,15 @@ public class ProductService {
         );
     }
 
+    /*
+     * Get product detail by product ID.
+     *
+     * Cache rule:
+     * Each product detail is cached by product ID.
+     * Example cache key:
+     * product-detail::1
+     */
+    @Cacheable(value = "product-detail", key = "#id")
     public ProductResponse getProductById(Long id) {
         Product product = productRepository.findByIdAndStatus(id, "ACTIVE")
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
@@ -92,7 +123,14 @@ public class ProductService {
         return productMapper.toResponse(product);
     }
 
+    /*
+     * Update product information.
+     *
+     * Cache rule:
+     * When admin updates a product, all product-related cache should be cleared.
+     */
     @Transactional
+    @CacheEvict(value = {"products", "product-detail"}, allEntries = true)
     public ProductResponse updateProduct(Long id, ProductRequest request) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
@@ -106,7 +144,14 @@ public class ProductService {
         return productMapper.toResponse(updatedProduct);
     }
 
+    /*
+     * Soft delete product by changing status to INACTIVE.
+     *
+     * Cache rule:
+     * When admin deletes a product, product cache must be cleared.
+     */
     @Transactional
+    @CacheEvict(value = {"products", "product-detail"}, allEntries = true)
     public void deleteProduct(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
@@ -115,6 +160,13 @@ public class ProductService {
         productRepository.save(product);
     }
 
+    /*
+     * Validate SKU before creating product.
+     *
+     * SKU must be unique because it identifies one specific product variant.
+     * Example:
+     * TSHIRT-WHITE-M
+     */
     private void validateSkuNotDuplicated(ProductRequest request) {
         if (request.getVariants() == null) {
             return;
