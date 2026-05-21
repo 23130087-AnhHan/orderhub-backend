@@ -1,8 +1,9 @@
 package com.orderhub.product.dto;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ProductVariantResponse {
+public class ProductVariantResponse implements Serializable {
 
     private Long id;
     private String sku;
