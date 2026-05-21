@@ -2,6 +2,8 @@ package com.orderhub.payment.service;
 
 import com.orderhub.common.exception.BusinessException;
 import com.orderhub.common.exception.ResourceNotFoundException;
+import com.orderhub.event.dto.PaymentEventMessage;
+import com.orderhub.event.publisher.EventPublisher;
 import com.orderhub.order.entity.Order;
 import com.orderhub.order.repository.OrderRepository;
 import com.orderhub.payment.dto.FakePaymentRequest;
@@ -13,7 +15,6 @@ import com.orderhub.user.entity.User;
 import com.orderhub.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.orderhub.notification.service.NotificationService;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -25,21 +26,20 @@ public class PaymentService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final PaymentMapper paymentMapper;
-    private final NotificationService notificationService;
-
+    private final EventPublisher eventPublisher;
 
     public PaymentService(
             PaymentRepository paymentRepository,
             OrderRepository orderRepository,
             UserRepository userRepository,
             PaymentMapper paymentMapper,
-            NotificationService notificationService
+            EventPublisher eventPublisher
     ) {
         this.paymentRepository = paymentRepository;
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.paymentMapper = paymentMapper;
-        this.notificationService = notificationService;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
@@ -65,34 +65,21 @@ public class PaymentService {
         payment.setOrder(order);
         payment.setPaymentMethod(request.getPaymentMethod());
         payment.setAmount(order.getTotalAmount());
+        payment.setTransactionCode(generateTransactionCode());
 
         if (request.isSuccess()) {
             payment.setStatus("SUCCESS");
-            payment.setTransactionCode(generateTransactionCode());
             payment.setPaidAt(LocalDateTime.now());
 
             order.setStatus("PAID");
             orderRepository.save(order);
-
-            notificationService.createNotification(
-                    user,
-                    "PAYMENT_SUCCESS",
-                    "Payment successful",
-                    "Your payment for order " + order.getOrderCode() + " was successful."
-            );
         } else {
             payment.setStatus("FAILED");
-            payment.setTransactionCode(generateTransactionCode());
-
-            notificationService.createNotification(
-                    user,
-                    "PAYMENT_FAILED",
-                    "Payment failed",
-                    "Your payment for order " + order.getOrderCode() + " failed. Please try again."
-            );
         }
 
         Payment savedPayment = paymentRepository.save(payment);
+
+        publishPaymentEvent(user, order, savedPayment);
 
         return paymentMapper.toResponse(savedPayment);
     }
@@ -104,6 +91,27 @@ public class PaymentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Payment not found"));
 
         return paymentMapper.toResponse(payment);
+    }
+
+    private void publishPaymentEvent(User user, Order order, Payment payment) {
+        PaymentEventMessage eventMessage = new PaymentEventMessage(
+                user.getId(),
+                order.getId(),
+                order.getOrderCode(),
+                payment.getId(),
+                payment.getAmount(),
+                payment.getPaymentMethod(),
+                payment.getStatus()
+        );
+
+        if ("SUCCESS".equals(payment.getStatus())) {
+            eventPublisher.publishPaymentSuccess(eventMessage);
+            return;
+        }
+
+        if ("FAILED".equals(payment.getStatus())) {
+            eventPublisher.publishPaymentFailed(eventMessage);
+        }
     }
 
     private String generateTransactionCode() {
