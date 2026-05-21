@@ -32,7 +32,7 @@ public class NotificationController {
     @PutMapping("/{id}/read")
     public ApiResponse<NotificationResponse> markAsRead(
             Authentication authentication,
-            @PathVariable Long id
+            @PathVariable String id
     ) {
         NotificationResponse response = notificationService.markAsRead(authentication.getName(), id);
         return ApiResponse.success("Notification marked as read", response);

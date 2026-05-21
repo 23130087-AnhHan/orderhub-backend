@@ -2,9 +2,9 @@ package com.orderhub.notification.service;
 
 import com.orderhub.common.exception.ResourceNotFoundException;
 import com.orderhub.common.response.PageResponse;
+import com.orderhub.notification.document.Notification;
 import com.orderhub.notification.dto.NotificationFilterRequest;
 import com.orderhub.notification.dto.NotificationResponse;
-import com.orderhub.notification.entity.Notification;
 import com.orderhub.notification.mapper.NotificationMapper;
 import com.orderhub.notification.repository.NotificationRepository;
 import com.orderhub.user.entity.User;
@@ -56,7 +56,7 @@ public class NotificationService {
     }
 
     @Transactional
-    public NotificationResponse markAsRead(String email, Long notificationId) {
+    public NotificationResponse markAsRead(String email, String notificationId) {
         User user = getUserByEmail(email);
 
         Notification notification = notificationRepository.findByIdAndUserId(notificationId, user.getId())
@@ -69,9 +69,14 @@ public class NotificationService {
         return notificationMapper.toResponse(savedNotification);
     }
 
-    @Transactional
     public void createNotification(User user, String type, String title, String message) {
-        Notification notification = new Notification(user, type, title, message);
+        Notification notification = new Notification(
+                user.getId(),
+                type,
+                title,
+                message
+        );
+
         notificationRepository.save(notification);
     }
 

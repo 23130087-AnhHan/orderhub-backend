@@ -25,6 +25,7 @@ services:
       - mysql
       - redis
       - rabbitmq
+      - mongodb
     environment:
       SPRING_PROFILES_ACTIVE: docker
       DB_HOST: mysql
@@ -40,6 +41,11 @@ services:
       RABBITMQ_PORT: 5672
       RABBITMQ_USERNAME: orderhub
       RABBITMQ_PASSWORD: orderhub_password
+      MONGODB_HOST: mongodb
+      MONGODB_PORT: 27017
+      MONGODB_DATABASE: orderhub_notification_db
+      MONGODB_USERNAME: orderhub
+      MONGODB_PASSWORD: orderhub_password
     ports:
       - "8081:8080"
     networks:
@@ -67,8 +73,24 @@ services:
     networks:
       - orderhub-network
 
+  mongodb:
+    image: mongo:7.0
+    container_name: orderhub-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: orderhub
+      MONGO_INITDB_ROOT_PASSWORD: orderhub_password
+      MONGO_INITDB_DATABASE: orderhub_notification_db
+    volumes:
+      - orderhub_mongodb_data:/data/db
+    networks:
+      - orderhub-network
+
 volumes:
   orderhub_mysql_data:
+  orderhub_mongodb_data:
 
 networks:
   orderhub-network:
