@@ -1,0 +1,51 @@
+### 1. Login user
+POST http://localhost:8081/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "Password123"
+}
+
+
+### 2. Add item to cart
+POST http://localhost:8081/api/v1/cart/items
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzQ4NjY0LCJleHAiOjE3Nzk0MzUwNjR9.ORd6XFeShGVtwz7O5mvReo1BxkiAszAxUb2ihLvx6B0LTYOwhENCnVyaDrjcjKvr6R_hGm9lTiP9ypTYE1xk4w
+Content-Type: application/json
+
+{
+  "productVariantId": 1,
+  "quantity": 2
+}
+
+
+### 3. Create order - should publish ORDER_CREATED event
+POST http://localhost:8081/api/v1/orders
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzQ4NjY0LCJleHAiOjE3Nzk0MzUwNjR9.ORd6XFeShGVtwz7O5mvReo1BxkiAszAxUb2ihLvx6B0LTYOwhENCnVyaDrjcjKvr6R_hGm9lTiP9ypTYE1xk4w
+Content-Type: application/json
+
+{
+  "note": "RabbitMQ test order"
+}
+
+
+### 4. Get notifications after order created
+GET http://localhost:8081/api/v1/notifications
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzQ4NjY0LCJleHAiOjE3Nzk0MzUwNjR9.ORd6XFeShGVtwz7O5mvReo1BxkiAszAxUb2ihLvx6B0LTYOwhENCnVyaDrjcjKvr6R_hGm9lTiP9ypTYE1xk4w
+
+
+### 5. Fake payment success - should publish PAYMENT_SUCCESS event
+POST http://localhost:8081/api/v1/payments/fake-pay
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzQ4NjY0LCJleHAiOjE3Nzk0MzUwNjR9.ORd6XFeShGVtwz7O5mvReo1BxkiAszAxUb2ihLvx6B0LTYOwhENCnVyaDrjcjKvr6R_hGm9lTiP9ypTYE1xk4w
+Content-Type: application/json
+
+{
+  "orderId": 1,
+  "paymentMethod": "FAKE_VNPAY",
+  "success": true
+}
+
+
+### 6. Get notifications after payment success
+GET http://localhost:8081/api/v1/notifications
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzQ4NjY0LCJleHAiOjE3Nzk0MzUwNjR9.ORd6XFeShGVtwz7O5mvReo1BxkiAszAxUb2ihLvx6B0LTYOwhENCnVyaDrjcjKvr6R_hGm9lTiP9ypTYE1xk4w

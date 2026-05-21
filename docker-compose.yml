@@ -24,6 +24,7 @@ services:
     depends_on:
       - mysql
       - redis
+      - rabbitmq
     environment:
       SPRING_PROFILES_ACTIVE: docker
       DB_HOST: mysql
@@ -35,6 +36,10 @@ services:
       JWT_EXPIRATION_MS: 86400000
       REDIS_HOST: redis
       REDIS_PORT: 6379
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: orderhub
+      RABBITMQ_PASSWORD: orderhub_password
     ports:
       - "8081:8080"
     networks:
@@ -46,6 +51,19 @@ services:
     restart: unless-stopped
     ports:
       - "6379:6379"
+    networks:
+      - orderhub-network
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: orderhub-rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: orderhub
+      RABBITMQ_DEFAULT_PASS: orderhub_password
     networks:
       - orderhub-network
 

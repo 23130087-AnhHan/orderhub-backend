@@ -30,6 +30,12 @@ spring:
       host: localhost
       port: 6379
 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: orderhub
+    password: orderhub_password
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -55,6 +61,11 @@ spring:
       host: ${REDIS_HOST:redis}
       port: ${REDIS_PORT:6379}
 
+  rabbitmq:
+    host: ${RABBITMQ_HOST:rabbitmq}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:orderhub}
+    password: ${RABBITMQ_PASSWORD:orderhub_password}
 
   jpa:
     hibernate:

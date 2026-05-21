@@ -24,7 +24,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.orderhub.notification.service.NotificationService;
+import com.orderhub.event.dto.OrderEventMessage;
+import com.orderhub.event.publisher.EventPublisher;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -39,7 +40,7 @@ public class OrderService {
     private final ProductVariantRepository productVariantRepository;
     private final UserRepository userRepository;
     private final OrderMapper orderMapper;
-    private final NotificationService notificationService;
+    private final EventPublisher eventPublisher;
 
     public OrderService(
             OrderRepository orderRepository,
@@ -47,14 +48,14 @@ public class OrderService {
             ProductVariantRepository productVariantRepository,
             UserRepository userRepository,
             OrderMapper orderMapper,
-            NotificationService notificationService
+            EventPublisher eventPublisher
     ) {
         this.orderRepository = orderRepository;
         this.cartRepository = cartRepository;
         this.productVariantRepository = productVariantRepository;
         this.userRepository = userRepository;
         this.orderMapper = orderMapper;
-        this.notificationService = notificationService;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
@@ -105,12 +106,15 @@ public class OrderService {
 
         Order savedOrder = orderRepository.save(order);
 
-        notificationService.createNotification(
-                user,
-                "ORDER_CREATED",
-                "Order created",
-                "Your order " + savedOrder.getOrderCode() + " has been created and is waiting for payment."
+        eventPublisher.publishOrderCreated(
+                new OrderEventMessage(
+                        user.getId(),
+                        savedOrder.getId(),
+                        savedOrder.getOrderCode(),
+                        savedOrder.getTotalAmount()
+                )
         );
+
 
         cart.getItems().clear();
         cartRepository.save(cart);
