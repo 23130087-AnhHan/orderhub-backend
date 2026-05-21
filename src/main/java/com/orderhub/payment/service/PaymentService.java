@@ -13,6 +13,7 @@ import com.orderhub.user.entity.User;
 import com.orderhub.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.orderhub.notification.service.NotificationService;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -24,17 +25,21 @@ public class PaymentService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final PaymentMapper paymentMapper;
+    private final NotificationService notificationService;
+
 
     public PaymentService(
             PaymentRepository paymentRepository,
             OrderRepository orderRepository,
             UserRepository userRepository,
-            PaymentMapper paymentMapper
+            PaymentMapper paymentMapper,
+            NotificationService notificationService
     ) {
         this.paymentRepository = paymentRepository;
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.paymentMapper = paymentMapper;
+        this.notificationService = notificationService;
     }
 
     @Transactional
@@ -68,9 +73,23 @@ public class PaymentService {
 
             order.setStatus("PAID");
             orderRepository.save(order);
+
+            notificationService.createNotification(
+                    user,
+                    "PAYMENT_SUCCESS",
+                    "Payment successful",
+                    "Your payment for order " + order.getOrderCode() + " was successful."
+            );
         } else {
             payment.setStatus("FAILED");
             payment.setTransactionCode(generateTransactionCode());
+
+            notificationService.createNotification(
+                    user,
+                    "PAYMENT_FAILED",
+                    "Payment failed",
+                    "Your payment for order " + order.getOrderCode() + " failed. Please try again."
+            );
         }
 
         Payment savedPayment = paymentRepository.save(payment);
