@@ -1,0 +1,45 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: orderhub-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: orderhub_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: orderhub_user
+      MYSQL_PASSWORD: orderhub_password
+    ports:
+      - "3308:3306"
+    volumes:
+      - orderhub_mysql_data:/var/lib/mysql
+    networks:
+      - orderhub-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: orderhub-backend
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: orderhub_db
+      DB_USERNAME: orderhub_user
+      DB_PASSWORD: orderhub_password
+      JWT_SECRET: orderhub-secret-key-for-docker-environment-must-be-at-least-32-characters
+      JWT_EXPIRATION_MS: 86400000
+    ports:
+      - "8081:8080"
+    networks:
+      - orderhub-network
+
+volumes:
+  orderhub_mysql_data:
+
+networks:
+  orderhub-network:
+    driver: bridge
