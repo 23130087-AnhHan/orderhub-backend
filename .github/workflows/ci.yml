@@ -31,14 +31,14 @@ jobs:
           java-version: 21
           cache: maven
 
+      - name: Make Maven Wrapper executable
+        run: chmod +x mvnw
+
       - name: Show Java version
         run: java -version
 
       - name: Show Maven version
         run: ./mvnw -v
-
-      - name: Make Maven Wrapper executable
-        run: chmod +x mvnw
 
       - name: Build project
         run: ./mvnw clean package -DskipTests
