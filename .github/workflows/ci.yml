@@ -9,6 +9,7 @@ on:
       - "feat/**"
       - "docs/**"
       - "ci/**"
+      - "test/**"
 
   pull_request:
     branches:
@@ -17,7 +18,7 @@ on:
 
 jobs:
   build:
-    name: Build Spring Boot Project
+    name: Build and Test Spring Boot Project
     runs-on: ubuntu-latest
 
     steps:
@@ -40,5 +41,5 @@ jobs:
       - name: Show Maven version
         run: ./mvnw -v
 
-      - name: Build project
-        run: ./mvnw clean package -DskipTests
+      - name: Run tests and build project
+        run: ./mvnw clean package
