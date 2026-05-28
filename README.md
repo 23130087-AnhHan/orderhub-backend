@@ -566,7 +566,39 @@ PUT /api/v1/notifications/{id}/read
 
 ---
 
-## 14. How To Run With Docker Compose
+---
+
+## 14. Swagger / OpenAPI Documentation
+
+This project uses Swagger/OpenAPI to document and test REST APIs.
+
+After starting the application, open:
+
+```text
+http://localhost:8080/swagger-ui/index.html
+```
+
+OpenAPI JSON is available at:
+
+```text
+http://localhost:8080/v3/api-docs
+```
+
+For protected APIs, click the **Authorize** button and enter:
+
+```text
+Bearer <your-jwt-token>
+```
+
+If Docker maps backend port as `8081:8080`, use:
+
+```text
+http://localhost:8081/swagger-ui/index.html
+```
+
+---
+
+## 15. How To Run With Docker Compose
 
 ### Prerequisites
 
@@ -649,7 +681,7 @@ Expected response:
 
 ---
 
-## 15. Docker Services
+## 16. Docker Services
 
 | Service | Container Name | Port |
 |---|---|---|
@@ -674,7 +706,7 @@ Password: orderhub_password
 
 ---
 
-## 16. Useful Docker Commands
+## 17. Useful Docker Commands
 
 Start all services:
 
@@ -714,7 +746,7 @@ docker ps
 
 ---
 
-## 17. How To Test Main Business Flow
+## 18. How To Test Main Business Flow
 
 ### Step 1: Register
 
@@ -902,7 +934,7 @@ Authorization: Bearer <USER_TOKEN>
 
 ---
 
-## 18. How To Check Redis
+## 19. How To Check Redis
 
 Open Redis CLI:
 
@@ -930,7 +962,7 @@ KEYS *
 
 ---
 
-## 19. How To Check RabbitMQ
+## 20. How To Check RabbitMQ
 
 Open RabbitMQ UI:
 
@@ -954,7 +986,7 @@ Queues → notification.queue
 
 ---
 
-## 20. How To Check MongoDB
+## 21. How To Check MongoDB
 
 Open Mongo shell:
 
@@ -976,7 +1008,7 @@ db.notifications.find().pretty()
 
 ---
 
-## 21. Business Rules
+## 22. Business Rules
 
 ### Register Rule
 
@@ -1023,7 +1055,7 @@ db.notifications.find().pretty()
 
 ---
 
-## 22. What I Learned
+## 23. What I Learned
 
 Through this project, I practiced:
 
@@ -1042,7 +1074,7 @@ Through this project, I practiced:
 
 ---
 
-## 23. Future Improvements
+## 24. Future Improvements
 
 Planned improvements:
 
@@ -1061,7 +1093,7 @@ Planned improvements:
 
 ---
 
-## 24. Interview Explanation
+## 25. Interview Explanation
 
 This project demonstrates backend engineering skills beyond simple CRUD.
 
@@ -1087,7 +1119,7 @@ I used @Transactional in order and payment flows to protect data consistency.
 
 ---
 
-## 25. Current Project Status
+## 26. Current Project Status
 
 Completed:
 
@@ -1123,7 +1155,7 @@ Deployment
 
 ---
 
-## 26. Author
+## 27. Author
 
 Project name:
 
