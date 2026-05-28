@@ -1,0 +1,55 @@
+### 1. Login user
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "Password123"
+}
+
+### 2. Add item to cart before creating order
+POST http://localhost:8080/api/v1/cart/items
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzQzNDc4LCJleHAiOjE3Nzk0Mjk4Nzh9.kmsU4GxJXf8fzG-Xa4HvqBDE41yBg7moc6akUpFVXjLibtlzv0SkjJp1EX4yJpYLlm5t_7F8uSOAxQP_x1gqLQ
+Content-Type: application/json
+
+{
+  "productVariantId": 1,
+  "quantity": 2
+}
+
+### 3. Create order
+POST http://localhost:8080/api/v1/orders
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzQzNDc4LCJleHAiOjE3Nzk0Mjk4Nzh9.kmsU4GxJXf8fzG-Xa4HvqBDE41yBg7moc6akUpFVXjLibtlzv0SkjJp1EX4yJpYLlm5t_7F8uSOAxQP_x1gqLQ
+Content-Type: application/json
+
+{
+  "note": "Please deliver after 6 PM"
+}
+
+### 4. Get notifications after order created
+GET http://localhost:8080/api/v1/notifications
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzQzNDc4LCJleHAiOjE3Nzk0Mjk4Nzh9.kmsU4GxJXf8fzG-Xa4HvqBDE41yBg7moc6akUpFVXjLibtlzv0SkjJp1EX4yJpYLlm5t_7F8uSOAxQP_x1gqLQ
+
+
+### 5. Fake payment success
+POST http://localhost:8080/api/v1/payments/fake-pay
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzQzNDc4LCJleHAiOjE3Nzk0Mjk4Nzh9.kmsU4GxJXf8fzG-Xa4HvqBDE41yBg7moc6akUpFVXjLibtlzv0SkjJp1EX4yJpYLlm5t_7F8uSOAxQP_x1gqLQ
+Content-Type: application/json
+
+{
+  "orderId": 2,
+  "paymentMethod": "FAKE_VNPAY",
+  "success": true
+}
+
+### 6. Get notifications after payment
+GET http://localhost:8080/api/v1/notifications
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzQzNDc4LCJleHAiOjE3Nzk0Mjk4Nzh9.kmsU4GxJXf8fzG-Xa4HvqBDE41yBg7moc6akUpFVXjLibtlzv0SkjJp1EX4yJpYLlm5t_7F8uSOAxQP_x1gqLQ
+
+### 7. Mark notification as read
+PUT http://localhost:8080/api/v1/notifications/1/read
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzQzNDc4LCJleHAiOjE3Nzk0Mjk4Nzh9.kmsU4GxJXf8fzG-Xa4HvqBDE41yBg7moc6akUpFVXjLibtlzv0SkjJp1EX4yJpYLlm5t_7F8uSOAxQP_x1gqLQ
+
+### 8. Get notifications after mark as read
+GET http://localhost:8080/api/v1/notifications
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzQzNDc4LCJleHAiOjE3Nzk0Mjk4Nzh9.kmsU4GxJXf8fzG-Xa4HvqBDE41yBg7moc6akUpFVXjLibtlzv0SkjJp1EX4yJpYLlm5t_7F8uSOAxQP_x1gqLQ

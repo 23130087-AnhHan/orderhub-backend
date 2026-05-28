@@ -1,0 +1,80 @@
+spring:
+  application:
+    name: orderhub
+
+  profiles:
+    active: dev
+
+server:
+  port: 8080
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:orderhub-secret-key-for-development-only-must-be-at-least-32-characters}
+    expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/orderhub_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=Asia/Ho_Chi_Minh&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+    mongodb:
+      uri: mongodb://orderhub:orderhub_password@localhost:27017/orderhub_notification_db?authSource=admin
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: orderhub
+    password: orderhub_password
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+
+  datasource:
+    url: jdbc:mysql://${DB_HOST:mysql}:${DB_PORT:3306}/${DB_NAME:orderhub_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=Asia/Ho_Chi_Minh&allowPublicKeyRetrieval=true
+    username: ${DB_USERNAME:orderhub_user}
+    password: ${DB_PASSWORD:orderhub_password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  data:
+    redis:
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}
+    mongodb:
+      uri: mongodb://${MONGODB_USERNAME:orderhub}:${MONGODB_PASSWORD:orderhub_password}@${MONGODB_HOST:mongodb}:${MONGODB_PORT:27017}/${MONGODB_DATABASE:orderhub_notification_db}?authSource=admin
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST:rabbitmq}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:orderhub}
+    password: ${RABBITMQ_PASSWORD:orderhub_password}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true

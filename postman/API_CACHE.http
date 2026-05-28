@@ -1,0 +1,63 @@
+### 1. Get products - first call
+GET http://localhost:8081/api/v1/products
+
+
+### 2. Get products - second call
+GET http://localhost:8081/api/v1/products
+
+
+
+### Register user in Docker
+POST http://localhost:8081/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "John Doe",
+  "email": "john@example.com",
+  "password": "Password123",
+  "phone": "0909123456"
+}
+
+### Login user
+POST http://localhost:8081/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "Password123"
+}
+
+### Create category
+POST http://localhost:8081/api/v1/admin/categories
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzQ3NDg0LCJleHAiOjE3Nzk0MzM4ODR9.TLxEIr_on6P5vUH03d1_d6JlgTY114adxQgH8KA1QIQDh8AoJEbGQyeS75mIvsvliG-jKZRXEbY3QrIRLH15QA
+Content-Type: application/json
+
+{
+  "name": "T-Shirts",
+  "description": "T-shirt products",
+  "status": "ACTIVE"
+}
+
+### Create product - should clear cache
+POST http://localhost:8081/api/v1/admin/products
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzQ3NDg0LCJleHAiOjE3Nzk0MzM4ODR9.TLxEIr_on6P5vUH03d1_d6JlgTY114adxQgH8KA1QIQDh8AoJEbGQyeS75mIvsvliG-jKZRXEbY3QrIRLH15QA
+Content-Type: application/json
+
+{
+  "categoryId": 1,
+  "name": "Cache Test Product 002",
+  "description": "Product used to test Redis cache invalidation",
+  "price": 199000,
+  "thumbnailUrl": "https://example.com/cache-test.jpg",
+  "status": "ACTIVE",
+  "variants": [
+    {
+      "sku": "CACHE-TEST-002",
+      "color": "White",
+      "size": "M",
+      "stockQuantity": 10,
+      "price": 199000,
+      "status": "ACTIVE"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+### 1. Login user
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "Password123"
+}
+
+
+### 2. Get my orders
+GET http://localhost:8080/api/v1/orders
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzQyNjY1LCJleHAiOjE3Nzk0MjkwNjV9.Ds_9kXsefapQZkCHIHkyNNAZydyyaw8Qr43-vA_aLrKgWd6Psj6p2BJRsvi8ryaHNRlD-Lm_ebCcJOP_AKwlgA
+
+### 3. Fake payment success
+POST http://localhost:8080/api/v1/payments/fake-pay
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzQyNjY1LCJleHAiOjE3Nzk0MjkwNjV9.Ds_9kXsefapQZkCHIHkyNNAZydyyaw8Qr43-vA_aLrKgWd6Psj6p2BJRsvi8ryaHNRlD-Lm_ebCcJOP_AKwlgA
+Content-Type: application/json
+
+{
+  "orderId": 1,
+  "paymentMethod": "FAKE_VNPAY",
+  "success": true
+}
+
+### 4. Get order detail after payment
+GET http://localhost:8080/api/v1/orders/1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzQyNjY1LCJleHAiOjE3Nzk0MjkwNjV9.Ds_9kXsefapQZkCHIHkyNNAZydyyaw8Qr43-vA_aLrKgWd6Psj6p2BJRsvi8ryaHNRlD-Lm_ebCcJOP_AKwlgA
+
+
+### 5. Get payment by order
+GET http://localhost:8080/api/v1/payments/orders/1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzQyNjY1LCJleHAiOjE3Nzk0MjkwNjV9.Ds_9kXsefapQZkCHIHkyNNAZydyyaw8Qr43-vA_aLrKgWd6Psj6p2BJRsvi8ryaHNRlD-Lm_ebCcJOP_AKwlgA
+
+### 6. Test pay again same order
+POST http://localhost:8080/api/v1/payments/fake-pay
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzQyNjY1LCJleHAiOjE3Nzk0MjkwNjV9.Ds_9kXsefapQZkCHIHkyNNAZydyyaw8Qr43-vA_aLrKgWd6Psj6p2BJRsvi8ryaHNRlD-Lm_ebCcJOP_AKwlgA
+Content-Type: application/json
+
+{
+  "orderId": 1,
+  "paymentMethod": "FAKE_VNPAY",
+  "success": true
+}

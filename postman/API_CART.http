@@ -1,0 +1,49 @@
+### 1. Login user
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "Password123"
+}
+
+### 2. Get cart
+GET http://localhost:8080/api/v1/cart
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzA4MjA1LCJleHAiOjE3NzkzOTQ2MDV9.si2xemO3MFqx7Lo6ww2-meBA8lJdmGHaODaTqdg1RN-P2ice_tzALfp5iahIeWMMwGC8sk8XvaAg8d1zgSTXRA
+
+### 3. Add item to cart
+POST http://localhost:8080/api/v1/cart/items
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzA4MjA1LCJleHAiOjE3NzkzOTQ2MDV9.si2xemO3MFqx7Lo6ww2-meBA8lJdmGHaODaTqdg1RN-P2ice_tzALfp5iahIeWMMwGC8sk8XvaAg8d1zgSTXRA
+Content-Type: application/json
+
+{
+  "productVariantId": 1,
+  "quantity": 2
+}
+
+### 4. Add same variant again
+POST http://localhost:8080/api/v1/cart/items
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzA4MjA1LCJleHAiOjE3NzkzOTQ2MDV9.si2xemO3MFqx7Lo6ww2-meBA8lJdmGHaODaTqdg1RN-P2ice_tzALfp5iahIeWMMwGC8sk8XvaAg8d1zgSTXRA
+Content-Type: application/json
+
+{
+  "productVariantId": 1,
+  "quantity": 1
+}
+
+### 5. Update cart item quantity
+PUT http://localhost:8080/api/v1/cart/items/1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzA4MjA1LCJleHAiOjE3NzkzOTQ2MDV9.si2xemO3MFqx7Lo6ww2-meBA8lJdmGHaODaTqdg1RN-P2ice_tzALfp5iahIeWMMwGC8sk8XvaAg8d1zgSTXRA
+Content-Type: application/json
+
+{
+  "quantity": 5
+}
+
+### 6. Remove cart item
+DELETE http://localhost:8080/api/v1/cart/items/1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzA4MjA1LCJleHAiOjE3NzkzOTQ2MDV9.si2xemO3MFqx7Lo6ww2-meBA8lJdmGHaODaTqdg1RN-P2ice_tzALfp5iahIeWMMwGC8sk8XvaAg8d1zgSTXRA
+
+### 7. Get cart after delete
+GET http://localhost:8080/api/v1/cart
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzA4MjA1LCJleHAiOjE3NzkzOTQ2MDV9.si2xemO3MFqx7Lo6ww2-meBA8lJdmGHaODaTqdg1RN-P2ice_tzALfp5iahIeWMMwGC8sk8XvaAg8d1zgSTXRA

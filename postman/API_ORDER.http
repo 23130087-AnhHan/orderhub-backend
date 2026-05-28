@@ -1,0 +1,56 @@
+### 1. Login user
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "Password123"
+}
+
+### 2. Get cart before adding item
+GET http://localhost:8080/api/v1/cart
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzEwMjkwLCJleHAiOjE3NzkzOTY2OTB9.QJtOH9K0ejnhO-G8qVy4rrV1FBmctT3T_awcetkYk8C5-Bjk2yklYIMBZxVxVeBQyF3YrdFeey-R-5CLEZ70bA
+
+### 3. Add item to cart
+POST http://localhost:8080/api/v1/cart/items
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzEwMjkwLCJleHAiOjE3NzkzOTY2OTB9.QJtOH9K0ejnhO-G8qVy4rrV1FBmctT3T_awcetkYk8C5-Bjk2yklYIMBZxVxVeBQyF3YrdFeey-R-5CLEZ70bA
+Content-Type: application/json
+
+{
+  "productVariantId": 1,
+  "quantity": 2
+}
+
+### 4. Get cart after adding item
+GET http://localhost:8080/api/v1/cart
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzEwMjkwLCJleHAiOjE3NzkzOTY2OTB9.QJtOH9K0ejnhO-G8qVy4rrV1FBmctT3T_awcetkYk8C5-Bjk2yklYIMBZxVxVeBQyF3YrdFeey-R-5CLEZ70bA
+
+### 5. Create order from cart
+POST http://localhost:8080/api/v1/orders
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzEwMjkwLCJleHAiOjE3NzkzOTY2OTB9.QJtOH9K0ejnhO-G8qVy4rrV1FBmctT3T_awcetkYk8C5-Bjk2yklYIMBZxVxVeBQyF3YrdFeey-R-5CLEZ70bA
+Content-Type: application/json
+
+{
+  "note": "Please deliver after 6 PM"
+}
+
+### 6. Get cart after creating order
+GET http://localhost:8080/api/v1/cart
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzEwMjkwLCJleHAiOjE3NzkzOTY2OTB9.QJtOH9K0ejnhO-G8qVy4rrV1FBmctT3T_awcetkYk8C5-Bjk2yklYIMBZxVxVeBQyF3YrdFeey-R-5CLEZ70bA
+
+### 7. Get my orders
+GET http://localhost:8080/api/v1/orders
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzEwMjkwLCJleHAiOjE3NzkzOTY2OTB9.QJtOH9K0ejnhO-G8qVy4rrV1FBmctT3T_awcetkYk8C5-Bjk2yklYIMBZxVxVeBQyF3YrdFeey-R-5CLEZ70bA
+
+### 8. Get order detail
+GET http://localhost:8080/api/v1/orders/1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzEwMjkwLCJleHAiOjE3NzkzOTY2OTB9.QJtOH9K0ejnhO-G8qVy4rrV1FBmctT3T_awcetkYk8C5-Bjk2yklYIMBZxVxVeBQyF3YrdFeey-R-5CLEZ70bA
+
+### 9. Test create order with empty cart
+POST http://localhost:8080/api/v1/orders
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaWF0IjoxNzc5MzEwMjkwLCJleHAiOjE3NzkzOTY2OTB9.QJtOH9K0ejnhO-G8qVy4rrV1FBmctT3T_awcetkYk8C5-Bjk2yklYIMBZxVxVeBQyF3YrdFeey-R-5CLEZ70bA
+Content-Type: application/json
+
+{
+  "note": "Test empty cart"
+}

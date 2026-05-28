@@ -1,0 +1,13 @@
+### 1. Health check Docker
+GET http://localhost:8081/api/v1/health
+
+### 2. Register user in Docker
+POST http://localhost:8081/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "Docker User",
+  "email": "docker@example.com",
+  "password": "Password123",
+  "phone": "0909123456"
+}

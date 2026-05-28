@@ -1,0 +1,97 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: orderhub-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: orderhub_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: orderhub_user
+      MYSQL_PASSWORD: orderhub_password
+    ports:
+      - "3308:3306"
+    volumes:
+      - orderhub_mysql_data:/var/lib/mysql
+    networks:
+      - orderhub-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: orderhub-backend
+    restart: unless-stopped
+    depends_on:
+      - mysql
+      - redis
+      - rabbitmq
+      - mongodb
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: orderhub_db
+      DB_USERNAME: orderhub_user
+      DB_PASSWORD: orderhub_password
+      JWT_SECRET: orderhub-secret-key-for-docker-environment-must-be-at-least-32-characters
+      JWT_EXPIRATION_MS: 86400000
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: orderhub
+      RABBITMQ_PASSWORD: orderhub_password
+      MONGODB_HOST: mongodb
+      MONGODB_PORT: 27017
+      MONGODB_DATABASE: orderhub_notification_db
+      MONGODB_USERNAME: orderhub
+      MONGODB_PASSWORD: orderhub_password
+    ports:
+      - "8081:8080"
+    networks:
+      - orderhub-network
+
+  redis:
+    image: redis:7.4
+    container_name: orderhub-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - orderhub-network
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: orderhub-rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: orderhub
+      RABBITMQ_DEFAULT_PASS: orderhub_password
+    networks:
+      - orderhub-network
+
+  mongodb:
+    image: mongo:7.0
+    container_name: orderhub-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: orderhub
+      MONGO_INITDB_ROOT_PASSWORD: orderhub_password
+      MONGO_INITDB_DATABASE: orderhub_notification_db
+    volumes:
+      - orderhub_mongodb_data:/data/db
+    networks:
+      - orderhub-network
+
+volumes:
+  orderhub_mysql_data:
+  orderhub_mongodb_data:
+
+networks:
+  orderhub-network:
+    driver: bridge
